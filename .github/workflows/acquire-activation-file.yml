@@ -1,4 +1,4 @@
-nname: Extract ULF without Hub
+name: Extract ULF without Hub
 on:
   workflow_dispatch:
 
