@@ -20,6 +20,3 @@ jobs:
         with:
           name: unity-license
           path: /root/.local/share/unity3d/Unity/Unity_lic.ulf
-
-          name: ${{ steps.getManualLicenseFile.outputs.filePath }}
-          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
