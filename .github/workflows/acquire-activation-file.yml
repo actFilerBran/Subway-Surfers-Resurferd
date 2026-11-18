@@ -1,20 +1,25 @@
-name: Acquire activation file
+nname: Extract ULF without Hub
 on:
   workflow_dispatch:
 
 jobs:
-  activation:
-    name: Request manual activation file
-    runs-on: ubuntu-latest # Проверьте, что в main.yml тоже стоит ubuntu-latest!
+  get-license:
+    runs-on: ubuntu-latest
+    container:
+      image: unityci/editor:ubuntu-2019.4.40f1-base-1
     steps:
-      - name: Request manual activation file
-        id: getManualLicenseFile
-        uses: game-ci/unity-request-activation-file@v2
-        with:
-          unity-version: 2019.4.40f1
+      - name: Activate Unity via CLI
+        run: |
+          /opt/unity/Editor/Unity -batchmode -nographics -quit \
+            -username "${{ secrets.UNITY_EMAIL }}" \
+            -password "${{ secrets.UNITY_PASSWORD }}" \
+            -logFile /dev/stdout || true
 
-      - name: Expose as artifact
+      - name: Find and upload ULF
         uses: actions/upload-artifact@v4
         with:
+          name: unity-license
+          path: /root/.local/share/unity3d/Unity/Unity_lic.ulf
+
           name: ${{ steps.getManualLicenseFile.outputs.filePath }}
           path: ${{ steps.getManualLicenseFile.outputs.filePath }}
